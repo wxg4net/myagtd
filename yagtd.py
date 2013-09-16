@@ -1,4 +1,4 @@
-#! /usr/bin/python -O
+#!/usr/bin/python2 -O
 # -*- coding: utf-8 -*-
 #
 # To-do list manager.
@@ -124,7 +124,7 @@ WORD_MATCH      = r"([_\w-]+)"
 DIGIT_MATCH     = r"([1-5])"
 NUMBER_MATCH    = r"(\d+)"
 TIMEDELTA_MATCH = r"(\d+)([WDHM])"
-DATE_MATCH      = r"(\d\d\d\d-\d\d-\d\d)"
+DATE_MATCH      = r"(\d\d\d\d-\d\d-\d\d-\d\d)"
 
 DOW             = ["mo", "tu", "we", "th", "fr", "sa", "su"]
 DOW_MATCH       = r"(" + "|".join (DOW) + ")"
@@ -274,8 +274,8 @@ class GTD(cmd.Cmd):
 
             matches = eval(attr.upper() + '_REGEXP').findall(line)
             if matches:
-                year, month, day = matches[-1].split('-')  # keep only last!
-                t[attr] = datetime.datetime(int(year), int(month), int(day))
+                year, month, day,hour = matches[-1].split('-')  # keep only last!
+                t[attr] = datetime.datetime(int(year), int(month), int(day),  int(hour))
 
             else:  # check if it is in format of special day
                 title = eval(attr.upper() + '_DOW_REGEXP').sub('', title)
@@ -336,7 +336,7 @@ class GTD(cmd.Cmd):
         # Parse dates
         for attr in ['start', 'due', 'end']:
             if task.has_key(attr) and task[attr]:
-                s += " " + eval(attr.upper() + '_CHAR') + task[attr].strftime("%Y-%m-%d")
+                s += " " + eval(attr.upper() + '_CHAR') + task[attr].strftime("%Y-%m-%d-%H")
             
         return s
 
@@ -386,7 +386,7 @@ class GTD(cmd.Cmd):
             task_id = self.todo.add(task)
 
             # And, set the start date if none
-            self.do_append("%d S:%s" % (task_id, datetime.datetime.now().strftime("%Y-%m-%d")))
+            self.do_append("%d S:%s" % (task_id, datetime.datetime.now().strftime("%Y-%m-%d-%H")))
 
             return task_id
 
@@ -408,7 +408,7 @@ class GTD(cmd.Cmd):
             self.todo[i] = task
             
             # And, set the start date if none
-            self.do_append("%d S:%s" % (idx, datetime.datetime.now().strftime("%Y-%m-%d")))
+            self.do_append("%d S:%s" % (idx, datetime.datetime.now().strftime("%Y-%m-%d-%H")))
 
     def _search(self, regexp, completed=False, quiet=False):
         """Retrieve tasks matching given regexp.
@@ -796,7 +796,7 @@ class GTD(cmd.Cmd):
 
     def do_start(self, id_date):
         """Set the Start / creation date:
-        GTD> start #id YYYY-MM-DD"""
+        GTD> start #id YYYY-MM-DD-HH"""
 
         # Parse command line
         idx, date = self._parse_args(id_date)
@@ -825,7 +825,7 @@ class GTD(cmd.Cmd):
             # Compute the new date= now + days_offset
             now = datetime.datetime.now()
             dayend = now + datetime.timedelta(int(days_offset))
-            date = dayend.strftime("%Y-%m-%d")
+            date = dayend.strftime("%Y-%m-%d-%H")
 
             self.do_modify("%d D:%s" % (idx, date))
 
