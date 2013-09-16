@@ -1,0 +1,96 @@
+#
+# yaGTD - Yet Another Getting Things Done
+# A primitive Getting Things Done to-do list manager.
+# Author: MiKael NAVARRO <klnavarro@gmail.com>.
+#
+
+yaGTD - Yet Another Getting Things Done
+=======================================
+
+**yaGTD** project is a very simple utility designed to make the
+management of your to-do list quick and easy.
+
+I have several long-term projects at work, and I need reminders
+to spend time on the important things that aren't too urgent.
+When, in 2006, I read David Allen's personal-productivity book
+`Getting Things Done`_, I tried to apply this method on my personal
+projects;  So, I needed a 'trusted system' ...
+
+.. _Getting Things Done: http://en.wikipedia.org/wiki/GTD
+
+But what another to-do list?  There are hundreds of to-do lists on the
+web, some commercial, some free, some need on-line connection while
+other not, some are integrated into an email client and some web sites
+were built to manage your to-do list, but I was looking for something
+a little different.
+
+.. _Gmail: http://saw.themurdaughs.com/gtd%20with%20gmail.pdf
+.. _GTDGmail: http://www.gtdgmail.com/
+.. _Tracks: http://www.rousette.org.uk/projects/
+.. _GTDTiddlyWiki: http://shared.snapgrid.com/gtd_tiddlywiki.html
+
+What I wanted was something lightweight and flexible, a simple way to
+carry and maintain my tasks around on a USB stick.
+The program needed to be capable of running on different platforms and
+must not depend on any data format or any web connection.
+
+I tried several software for managing to-do lists, including the excellent
+iKog_ and pyGTD_ [#]_ programs, but I found that the former was missing the
+notion of urgency and importance (preached by Stephen Covey into
+`Seven Habits of Highly Effective People`_), and the latter made it
+too laborious to maintain data.
+
+.. _iKog: http://www.henspace.co.uk/ikog/index.html
+.. _pyGTD: http://96db.com/pyGTD/
+.. [#] pyGTD is now part of VimGTD_ (original ^^).
+.. _VimGTD: http://www.vim.org/scripts/script.php?script_id=1699
+
+.. _Seven Habits of Highly Effective People: http://www.amazon.com/exec/obidos/ASIN/0671708635/areadersjournal
+
+And so, after several months of occasional experimentation, I decided
+to write my own tool that includes the easy to use but powerful
+commmand line interface from iKog_ and the management of Covey
+concepts from pyGTD_.
+
+To resume, if you are looking for fancy menus and windows, go away;
+But, if you are comfortable at the command line a simple plain text is
+an age-old but perfect method for tracking your stuff, and *yaGTD* can
+help you to manage efficiently this file.
+
+.. _why plain text makes sense: http://ginatrapani.github.com/todo.txt-cli/
+
+Licence
+=======
+
+yaGTD is a free software available under the terms of the GNU General
+Public Licence.  Refer to the file COPYING (which should be included
+in this distribution) for the specific terms of this licence.
+
+Requirements
+============
+
+Python 2.3 or later must be installed on your system.
+
+Theorically must works on all platforms.
+
+Usage
+=====
+
+Simply run::
+
+  $ python yagtd.py
+
+then, see documentation for more details.
+
+For (non-interactively) CLI a wrapper ``yagtd-cli.py`` is available
+under tools directory.
+
+Remark
+======
+
+An Emacs major mode for viewing yaGTD to-do list, and a wrapper
+``yagtd-s60.py`` for pyS60 (Symbian) smartphone are available under
+tools directory.
+
+--
+MiKael NAVARRO
