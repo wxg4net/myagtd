@@ -1426,11 +1426,15 @@ Type 'help' or '?' for more commands/options."""
             g_task_title = g_task['title'].encode('utf-8').strip()
             find = False
             for task in tasks:
-                if g_task_title == task['title'].decode('utf-8'):
+                if g_task_title == task['title']:
                     find = True
+                    if 'status' in g_task and 'complete' in task \
+                        and g_task['status'] == 'complete' and task['complete'] <> 100:
+                        self.do_modify("%d C:%d" % (task['id'], 100))
                     break
+                
             if not find and g_task_title <> '':
-                print len(g_task_title)
+
                 t = Task({
                     'title': g_task_title, 
                     'start': datetime.datetime(*(DT_parser.parse(g_task['updated']).timetuple()[:6]))

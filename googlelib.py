@@ -22,7 +22,7 @@ class GoogleGtasks():
     
   def __init__(self):
     self.credentials_file = os.getenv("HOME")+'/.yagtd/credentials.dat'
-    self.client_secrets_file = os.getenv("HOME")+'/.yagtd/client_sec rets.json'
+    self.client_secrets_file = os.getenv("HOME")+'/.yagtd/client_secrets.json'
     
     if not os.path.isfile(self.client_secrets_file):
         raise Exception('client_secrets.json not exits')
