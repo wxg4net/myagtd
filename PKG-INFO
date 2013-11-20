@@ -1,12 +1,12 @@
 Metadata-Version: 1.0
-Name: yagtd
+Name: yagtd++
 Version: 0.3.4
 Summary: Yet Another Getting Things Done
-Home-page: https://gna.org/projects/yagtd
+Home-page: https://github.com/wxg4net/yagtd/
 Author: Mikael NAVARRO
 Author-email: klnavarro@free.fr
 License: GNU General Public License
-Download-URL: http://download.gna.org/yagtd
+Download-URL: https://github.com/wxg4net/yagtd/archive/master.zip
 Description: A primitive Getting Things Done to-do list manager.
 Platform: Theorically all platforms.
 Classifier: Development Status :: 4 - Beta
