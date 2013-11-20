@@ -38,6 +38,7 @@ import sys
 import errno
 import re
 import datetime
+import codecs
 from math import sqrt, log
 
 import cmd
@@ -126,7 +127,7 @@ START_CHAR      = "S:"
 DUE_CHAR        = "D:"
 END_CHAR        = "E:"
 
-WORD_MATCH      = r"([_\w-]+)"
+WORD_MATCH      = r"(\S+)"
 DIGIT_MATCH     = r"([1-5])"
 NUMBER_MATCH    = r"(\d+)"
 TIMEDELTA_MATCH = r"(\d+)([WDHM])"
@@ -152,6 +153,8 @@ END_REGEXP        = re.compile(END_CHAR + DATE_MATCH, re.IGNORECASE)
 START_DOW_REGEXP  = re.compile(START_CHAR + DOW_MATCH, re.IGNORECASE)
 DUE_DOW_REGEXP    = re.compile(DUE_CHAR + DOW_MATCH, re.IGNORECASE)
 END_DOW_REGEXP    = re.compile(END_CHAR + DOW_MATCH, re.IGNORECASE)
+
+STR_CLEAN_REGEXP    = re.compile(r'([\s!@]+)')
 
 #
 # Main GTD class.
@@ -1243,7 +1246,7 @@ class GTD(cmd.Cmd):
 
         self.todotxt = todotxt  # ok, save file path
         try:
-            f = open(self.todotxt, 'r')
+            f = codecs.open(self.todotxt, 'r', 'utf-8')
             try:
                 self.todo.erase()  # clean
                 nb = 0
@@ -1420,24 +1423,30 @@ Type 'help' or '?' for more commands/options."""
             google_tasks = gtasks.list()
         except Exception as e:
             print e
-            return 
+            return
+        except KeyboardInterrupt:
+            return
             
         tasks = self.todo
         rsync_modify_num = rsync_down_num = 0
         for g_task in google_tasks:
-            g_task_title = g_task['title'].encode('utf-8').strip()
+            g_task_title = g_task['title'].encode('utf-8')
+            g_task_title = STR_CLEAN_REGEXP.sub('', g_task_title)
             g_task_status = g_task['status'].encode('utf-8')
             find = False
             for task in tasks:
-                if g_task_title == task['title'].encode('utf-8'):
-                    find = True
+                
+                if g_task_title == task['title']:
                     if 'status' in g_task and g_task_status == u'completed':
                         if 'complete' in task and task['complete'] == 100:
                             pass
                         else:
                             rsync_modify_num += 1
                             self.do_modify("%d C:%d" % (task['id'], 100))
+                    find = True
                     break
+                else:
+                    print g_task_title , task['title'], (g_task_title , task['title'])
                 
             if not find and g_task_title <> '':
 
@@ -1449,7 +1458,8 @@ Type 'help' or '?' for more commands/options."""
                     t['due'] = datetime.datetime(*(DT_parser.parse(g_task['due']).timetuple()[:6]))
     
                 if 'notes' in g_task:
-                    t['context'] = [g_task['notes'].encode('utf-8')]
+                    context = CONTEXT_CLEAN_REGEXP.sub('*', g_task['notes'].encode('utf-8'))
+                    t['context'] = [context]
                 if 'status' in g_task :
                     if g_task_status == u'completed':
                         t['complete'] = 100
