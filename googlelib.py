@@ -33,7 +33,7 @@ class GoogleGtasks():
     self.storage = Storage(self.credentials_file)
     self.credentials = self.storage.get()
     
-    httplib2.debuglevel = 4
+    #~ httplib2.debuglevel = 4
     self.http = httplib2.Http()
     
     if self.credentials is None or self.credentials.invalid:

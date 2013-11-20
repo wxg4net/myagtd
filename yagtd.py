@@ -1435,7 +1435,6 @@ Type 'help' or '?' for more commands/options."""
             g_task_status = g_task['status'].encode('utf-8')
             find = False
             for task in tasks:
-                
                 if g_task_title == task['title']:
                     if 'status' in g_task and g_task_status == u'completed':
                         if 'complete' in task and task['complete'] == 100:
@@ -1446,7 +1445,8 @@ Type 'help' or '?' for more commands/options."""
                     find = True
                     break
                 else:
-                    print g_task_title , task['title'], (g_task_title , task['title'])
+                    pass
+                    #~ print g_task_title , task['title'], (g_task_title , task['title'])
                 
             if not find and g_task_title <> '':
 
@@ -1458,7 +1458,7 @@ Type 'help' or '?' for more commands/options."""
                     t['due'] = datetime.datetime(*(DT_parser.parse(g_task['due']).timetuple()[:6]))
     
                 if 'notes' in g_task:
-                    context = CONTEXT_CLEAN_REGEXP.sub('*', g_task['notes'].encode('utf-8'))
+                    context = STR_CLEAN_REGEXP.sub('*', g_task['notes'].encode('utf-8'))
                     t['context'] = [context]
                 if 'status' in g_task :
                     if g_task_status == u'completed':
