@@ -46,6 +46,9 @@ if __debug__: from pprint import pprint as pp
 
 from gtd import Task, ToDo
 import gtd
+from googlelib import GoogleGtasks as Gtasks
+import datetime, pytz
+from dateutil import parser as DT_parser
 
 # Global variables
 TODO_DIR    = "."
@@ -1400,7 +1403,45 @@ Options:
 Type 'help' or '?' for more commands/options."""
 
     do_langref = do_usage
-         
+    
+    #
+    # rsync
+    #
+
+    def do_rsync(self, nb):
+        """rsync  tasks from Google tasks:
+        GTD> rsync """
+        
+        gtasks = Gtasks()
+        google_tasks = gtasks.list()
+        
+        tasks = self.todo
+        rsync_up_num = rsync_down_num = 0
+        for g_task in google_tasks:
+            print g_task
+            g_task_title = g_task['title'].encode('utf-8')
+            find = False
+            for task in tasks:
+                if g_task_title == task['title']:
+                    find = True
+                    break
+            if not find and g_task_title <> '':
+                t = Task({
+                    'title': g_task_title, 
+                    'start': datetime.datetime(*(DT_parser.parse(g_task['updated']).timetuple()[:6]))
+                    })
+                if 'due' in g_task:
+                    t['due'] = datetime.datetime(*(DT_parser.parse(g_task['due']).timetuple()[:6]))
+                    print t['due']
+                if 'notes' in g_task:
+                    t['context'] = [g_task['notes'].encode('utf-8')]
+                if 'status' in g_task :
+                    if g_task['status'] == 'complete':
+                        t['complete'] = 100
+                t_index = self.todo.add(t)
+                rsync_down_num += 1
+        print 'downloaded %d Tasks from Google Tasks' % rsync_down_num
+
     #
     # Quit.
     #
