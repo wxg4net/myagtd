@@ -1412,27 +1412,32 @@ Type 'help' or '?' for more commands/options."""
         """rsync  tasks from Google tasks:
         GTD> rsync """
         
-        gtasks = Gtasks()
-        google_tasks = gtasks.list()
-        
+        try:
+            gtasks = Gtasks()
+            google_tasks = gtasks.list()
+        except Exception as e:
+            print e
+            return 
+            
         tasks = self.todo
         rsync_up_num = rsync_down_num = 0
         for g_task in google_tasks:
-            print g_task
-            g_task_title = g_task['title'].encode('utf-8')
+            #~ print g_task
+            g_task_title = g_task['title'].encode('utf-8').strip()
             find = False
             for task in tasks:
-                if g_task_title == task['title']:
+                if g_task_title == task['title'].decode('utf-8'):
                     find = True
                     break
             if not find and g_task_title <> '':
+                print len(g_task_title)
                 t = Task({
                     'title': g_task_title, 
                     'start': datetime.datetime(*(DT_parser.parse(g_task['updated']).timetuple()[:6]))
                     })
                 if 'due' in g_task:
                     t['due'] = datetime.datetime(*(DT_parser.parse(g_task['due']).timetuple()[:6]))
-                    print t['due']
+    
                 if 'notes' in g_task:
                     t['context'] = [g_task['notes'].encode('utf-8')]
                 if 'status' in g_task :
@@ -1440,7 +1445,8 @@ Type 'help' or '?' for more commands/options."""
                         t['complete'] = 100
                 t_index = self.todo.add(t)
                 rsync_down_num += 1
-        print 'downloaded %d Tasks from Google Tasks' % rsync_down_num
+        if rsync_down_num:
+            print 'downloaded %d Tasks from Google Tasks' % rsync_down_num
 
     #
     # Quit.

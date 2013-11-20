@@ -8,7 +8,6 @@ from apiclient.discovery import build
 import os
 import httplib2
 
-
 class GoogleGtasks():
   
     #~ task[status] = needsAction
@@ -22,15 +21,20 @@ class GoogleGtasks():
     #~ task[selfLink]
     
   def __init__(self):
-    self.data_dir = os.getenv("HOME")+'/.yagtd/'
-    self.storage = Storage(self.data_dir+'credentials.dat')
+    self.credentials_file = os.getenv("HOME")+'/.yagtd/credentials.dat'
+    self.client_secrets_file = os.getenv("HOME")+'/.yagtd/client_sec rets.json'
+    
+    if not os.path.isfile(self.client_secrets_file):
+        raise Exception('client_secrets.json not exits')
+        
+    self.storage = Storage(self.credentials_file)
     self.credentials = self.storage.get()
     
     #~ httplib2.debuglevel = 4
     self.http = httplib2.Http()
     
     if self.credentials is None or self.credentials.invalid:
-      flow = flow_from_clientsecrets(self.data_dir+'client_secrets.json',
+      flow = flow_from_clientsecrets(self.client_secrets_file,
                                  scope='https://www.googleapis.com/auth/tasks',
                                  redirect_uri='urn:ietf:wg:oauth:2.0:oob')
       self.credentials = run(flow, self.storage)
@@ -45,8 +49,7 @@ class GoogleGtasks():
     try:
         result = self.gtask.list(tasklist='@default').execute()
     except:
-        print 'network error'
-        return tasks
+        raise Exception('network error')
     tasks = result.get('items', [])
     return tasks
 
