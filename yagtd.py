@@ -1426,11 +1426,12 @@ Type 'help' or '?' for more commands/options."""
         rsync_modify_num = rsync_down_num = 0
         for g_task in google_tasks:
             g_task_title = g_task['title'].encode('utf-8').strip()
+            g_task_status = g_task['status'].encode('utf-8')
             find = False
             for task in tasks:
-                if g_task_title == task['title'].decode('utf-8'):
+                if g_task_title == task['title'].encode('utf-8'):
                     find = True
-                    if 'status' in g_task and g_task['status'].encode('utf-8') == u'completed':
+                    if 'status' in g_task and g_task_status == u'completed':
                         if 'complete' in task and task['complete'] == 100:
                             pass
                         else:
@@ -1450,13 +1451,13 @@ Type 'help' or '?' for more commands/options."""
                 if 'notes' in g_task:
                     t['context'] = [g_task['notes'].encode('utf-8')]
                 if 'status' in g_task :
-                    if g_task['status'] == 'complete':
+                    if g_task_status == u'completed':
                         t['complete'] = 100
                         
                 t_index = self.todo.add(t)
                 rsync_down_num += 1
         if rsync_modify_num:
-            print 'modifyed %d Tasks from Google Tasks' % rsync_down_num
+            print 'modifyed %d Tasks from Google Tasks' % rsync_modify_num
         if rsync_down_num:
             print 'downloaded %d Tasks from Google Tasks' % rsync_down_num
 
