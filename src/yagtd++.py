@@ -50,7 +50,7 @@ if __debug__: from pprint import pprint as pp
 
 from gtd import Task, ToDo
 import gtd
-from googlelib import GoogleGtasks as Gtasks
+from gtdgooglelib import GoogleGtasks as Gtasks
 import datetime, pytz
 from dateutil import parser as DT_parser
 
