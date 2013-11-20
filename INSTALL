@@ -1,0 +1,47 @@
+#
+# yaGTD - Yet Another Getting Things Done
+# A primitive Getting Things Done to-do list manager.
+# Author: MiKael NAVARRO <klnavarro@gmail.com>.
+#
+
+Installation
+============
+
+Install as root
+---------------
+
+To install *yaGTD*, simply run the included install script with the
+"install" command::
+
+  python setup.py install
+
+or::
+
+  python setup.py install --prefix /usr/local
+
+The package is installed in ``{prefix}/lib/python-version/site-packages/``
+and the the doc file in ``{prefix}/share/doc/yagtd/``.
+The main script is installed in ``{prefix}/bin/``.
+
+Install as normal user
+----------------------
+
+If you want installation the package as a normal user, run::
+
+  python setup.py install --home $HOME
+
+Note that you have to adjust your PATH and PYTHONPATH environment variables,
+eg. by adding the commands ``export PYTHONPATH=$HOME/lib/python``
+and ``export PATH=$PATH:$HOME/bin`` to your shell configuration file.
+
+For information on the various options available, use::
+
+   python setup.py --help
+   python setup.py --help-commands
+
+Install manually
+----------------
+
+If you'd rather do the installation manually, simply move or copy the
+directory ``yagtd-x.x.x/src`` to a location found in your ``PYTHONPATH``.
+

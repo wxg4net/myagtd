@@ -1,0 +1,18 @@
+Metadata-Version: 1.0
+Name: yagtd
+Version: 0.3.4
+Summary: Yet Another Getting Things Done
+Home-page: https://gna.org/projects/yagtd
+Author: Mikael NAVARRO
+Author-email: klnavarro@free.fr
+License: GNU General Public License
+Download-URL: http://download.gna.org/yagtd
+Description: A primitive Getting Things Done to-do list manager.
+Platform: Theorically all platforms.
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Environment :: Console (Text Based)
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Office/Business

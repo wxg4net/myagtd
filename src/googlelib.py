@@ -24,8 +24,15 @@ class GoogleGtasks():
     #~ task[selfLink]
     
   def __init__(self):
-    self.credentials_file = os.getenv("HOME")+'/.yagtd/credentials.dat'
-    self.client_secrets_file = os.getenv("HOME")+'/.yagtd/client_secrets.json'
+    self.user_data_dir = os.sep.join([os.getenv("HOME"), '.yagtd++'])
+    if not os.path.isdir(self.user_data_dir):
+      try:
+        os.mkdir(self.user_data_dir)
+      except:
+        raise Exception('OSError')
+        
+    self.credentials_file = os.sep.join([self.user_data_dir, 'credentials.dat'])
+    self.client_secrets_file = '/usr/share/yagtd++/client_secrets.json'
     
     if not os.path.isfile(self.client_secrets_file):
         raise Exception('client_secrets.json not exits')
@@ -48,11 +55,12 @@ class GoogleGtasks():
     self.tasks = []
     
   def list(self):
-    tasks = []
+    
     try:
         result = self.gtask.list(tasklist='@default').execute()
     except:
         raise Exception('network error')
+        
     tasks = result.get('items', [])
     return tasks
 

@@ -1,0 +1,254 @@
+#
+# yaGTD - Yet Another Getting Things Done
+# A primitive Getting Things Done to-do list manager.
+#
+
+2010-07-30  Max VOZELER
+
+	* yagtd.sh: Add a small shell function which IMHO gives a
+	typing-friendlier interface (task#7119).
+
+2010-07-23  MiKael NAVARRO, Max VOZELER
+
+	* yagtd-cli.py: Add a wrapper (task#7119) to run commands
+	non-interactively.
+
+2010-06-29  Miroslaw OPOKA
+
+	* yagtd.py (_parse_line): Other date input format (D: as "mo",
+	"tu", ..., "su").
+	
+2010-06-10  Serafeim ZANIKOLA, Max VOZELER
+
+	* yagtd.py, yagtd.1: add a --quiet option for not printing the
+	copyright message upon startup (patch#1699).
+
+2010-04-23  Geobert, Soren HANSEN, MiKael NAVARRO
+
+	* yagtd.py (do_archive): fix crash (bug #13987) when archive then
+	order.
+	* yagtd.py (do_load): fix bug (#13349) while loading a
+	non-existing file, and trying to save it.
+	
+2010-04-21  Florian KRAUSE, Hu SONGTAO, MiKael NAVARRO
+
+	* yagtd.py (do_listinbox): list tasks without context, i.e. in the
+	inbox (task #6877).
+	* yagtd.py (do_duein): set the Due date in +/- days (task #6585).
+	* gtd.py (Task.__init__): by default create a task with an urgency
+	in current month.
+	* gtd.py (priority): podulate priority calculation when due date
+	is overdue or when status !someday is applied (task #6861).
+
+2010-04-19  MiKael NAVARRO
+
+	* yagtd.py (do_list*): disp number of task found after a research.
+
+2010-04-17  Wouter VAN HEYST
+
+	* yagtd.py (do_print): an approach to also printing out not
+	otherwise printed tasks (tasks that do not have contexts,
+	projects, or other things) (patch #1172).
+
+2010-04-16  Thomas VANDER STICHELE
+
+	* yagtd.py (do_contexts): display contexts and next task
+	for each context (patch #1366).
+	* yagtd.py (do_overdue, do_deadlines): cmds 'overdue' and
+	'deadlines' to see tasks overdue or coming up (patch #1366).
+
+2010-04-15  MiKael NAVARRO
+
+	* yagtd.py: allow to use '+' instead of 'p:' to set project.
+
+2010-03-07  Martin Treusch von Buttlar
+
+	* README, LISEZMOI, doc: update doc urls...
+
+2010-02-09  MiKael NAVARRO
+
+	* yagtd.py: add some shortcuts (for S60 platform).
+
+2009-12-20  MiKael NAVARRO
+
+	* yagtd-s60.py: add main for S60 platform (Nokia Symbian OS).
+
+2009-11-06  Alexander SCHREMMER
+
+	* yagtd.py (__init__, select, deselect, selected): list
+	to remember tasks planned for today (patch #1333).
+	* yagtd (usage, langref): show language reference.
+
+2009-11-06  Nicolas MAITRE
+
+	* yagtd.py (_replace): add start time after replace (bug #14686,
+	Debian bug report #545192).
+
+2009-11-06  Max VOZELER
+
+	* yagtd.1: simple yagtd  manpage (patch #1361).
+
+2009-09-17  MiKael NAVARRO
+
+	* yagtd.py (do_close): fix recurrence calculation on start date.
+
+2009-06-21  MiKael NAVARRO
+
+	* gtd.py, yagtd.py (_show): display urgency and importance label
+	in detailed view.
+	* yagtd.py (do_archive): task #6319, archive completed tasks.
+
+2009-05-27  MiKael NAVARRO
+
+	* yagtd.py (_disp): task #6539, display formatted line even
+	in optimisation mode.
+
+2009-04-15  Hu SONGTAO, Aurelien BOMPARD
+
+	* yagtd.py (do_today): task bug#13340, "today" command: todos
+	only in today, and due in today.
+	* yagtd.py (do_sort, do_listpri, do_order): task#6513, tasks must
+	appear only after the Start date.
+
+2009-03-18  Daniel SCHÜSSLER, Ward VANDEWEGE
+
+	* yagtd.py (do_urgency, ...): fix bug#12793, "urgency" called with
+	only one argument crashes yagtd.
+	* yagtd.py (do_listpri): add regexp filtering to listpri command.
+
+2008-05-07  Bruno BORD
+
+	* yagtd.py (do_appendall, do_modifyall): modify several tasks.
+
+2008-05-06  Thomas VANDER STICHELE
+
+	* yagtd.py (do_close): also print the summary after marking a task
+	done.
+	* yagtd.py (do_modify): prints a message when we try to modify a
+	task but it did not understand the id.
+	* yagtd.py (do_list, do_listall, do_listref): prints the number of
+	task as the result of the search, if it's bigger than 10.
+
+2008-04-24  MiKael NAVARRO
+
+	* yagtd.py (do_EOF): auto save TODO_TXT at exit.
+
+2008-02-24  MiKael NAVARRO
+
+	* yagtd.py (do_*): improve interactive help.
+
+2008-02-14  MiKael NAVARRO
+
+	* yagtd.py (main): use positional argument instead of option for
+	todo.txt file.
+
+2008-02-12  MiKael NAVARRO
+
+	* yagtd.py (do_urgency, ...): add commands to set the urgency, the
+	importance, the time requiered, the target date, ...
+	* yagtd.py (do_*): improve interactive help.
+
+2008-01-06  MiKael NAVARRO
+
+	* yagtd.py (do_waitingfor): move waitingfor, maybe, someday from
+	context to status (from a remark of Thomas).
+
+2007-12-18  MiKael NAVARRO
+
+	* yagtd.py (do_order): don't show empty context/project/...
+
+2007-12-15  MiKael NAVARRO
+
+	* yagtd.py (do_done): fix closure of reccurring tasks.
+
+2007-11-29  MiKael NAVARRO
+
+	* yagtd-mode.el: major mode for editing yaGTD to-do lists.
+
+2007-10-02  Thomas VANDER STICHELE
+
+	* yagtd.py (_search, do_search, do_searchall): filter searches
+	with/without completed tasks.
+	* yagtd.py: allow dashes in words for context and such ...
+
+2007-09-23  Thomas VANDER STICHELE
+
+	* yagtd.py (do_extend, do_add, do_edit, do_status): apply some
+	  smallish patches
+	  https://thomas.apestaart.org/thomas/trac/browser/patches/yagtd/patches
+
+2007-08-28  MiKael NAVARRO
+
+	* yagtd.py (do_load): save path to opened todo.txt file.
+
+2007-01-03  MiKael NAVARRO
+
+	* yagtd.py: rename main script gtd_cmd.py to yagtd.py
+
+2006-12-18  MiKael NAVARRO
+
+	* gtd_cmd.py (do_order): allow to order by reference.
+	* gtd_cmd.py (do_list): do not list tasks with an end date.
+
+2006-12-15  MiKael NAVARRO
+
+	* yagtd.rest: add documentation (reviewed by Miguel DARDENNE).
+
+2006-12-10  MiKael NAVARRO
+
+	* gtd_cmd.py (_parse_args): check command arguments.
+	* gtd.py (order): allow to order by contexts/projects/statuses.
+
+2006-12-09  MiKael NAVARRO
+
+	* gtd_cmd.py (do_status): add status command to display projects
+	completion.
+	* gtd_cmd.py (_parse_line): check that input commands are
+	correctly formatted!
+	* gtd_cmd.py (do_close): manage recurrent tasks.
+	* gtd_cmd.py (do_import): remove useless YAML support.
+
+2006-12-04  MiKael NAVARRO
+
+	* gtd_cmd.py (do_append, do_modify): fix append/modify commands.
+	* gtd_cmd.py (_add): set the start date automatically if not
+	present.
+
+2006-12-03  MiKael NAVARRO
+
+	* gtd_cmd.py (_parse_line): filter completed tasks.
+
+2006-11-27  MiKael NAVARRO
+
+	* gtd_cmd.py (do_load): filter commented lines (#) while loading
+	todotxt.
+	* setup.py, README: add README, setup.py ...
+
+2006-11-26  MiKael NAVARRO
+
+	* gtd_cmd.py (do_replace, do_modify): add edit/modif functions.
+	* gtd_cmd.py (do_extend, do_append): fix modify function.
+	* gtd.py (search, find, sort, order): add search function.
+	* gtd_cmd.py (_colorize): add colorization.
+	* gtd_cmd.py (do_save): fix save function.
+	* yagtd.rest: updt help.
+	* gtd_cmd.py (do_load): fix load function (erase todo list before
+	reloading).
+
+2006-11-25  MiKael NAVARRO
+
+	* gtd_cmd.py: check YAML module availability.
+
+2006-11-24  MiKael NAVARRO
+
+	* gtd_cmd.py (_parse_line): improve line parsing (datetime and
+	timedelta).
+
+2006-11-23  MiKael NAVARRO
+
+	* gtd.py (Task): inherit Task from dict object.
+	* gtd_cmd.py (GTD): add a command line interface.
+
+2006-11-22  MiKael NAVARRO
+
+	* pygtd.py: first version based on pyGTD tool.

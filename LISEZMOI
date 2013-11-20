@@ -1,0 +1,100 @@
+#
+# yaGTD - Yet Another Getting Things Done
+# A primitive Getting Things Done to-do list manager.
+# Author: MiKael NAVARRO <klnavarro@gmail.com>.
+#
+
+yaGTD - Yet Another Getting Things Done
+=======================================
+
+Le projet **yaGTD** est un ensemble d'outils et de bibliothèques
+interactives pour la gestion de to-do listes.
+
+J'ai de nombreux projets en cour et encore plus qui me trottent dans
+la tête, aussi un système de to-do liste c'est très vite imposé à moi.
+Mais, la gestion de cette liste est devenu bien trop fastidieuse et
+j'y perdai la notion de priorité, c'est là qu'il *Y'A GTD* !
+
+Il me fallait donc trouver un "système de confiance" pour m'aider dans
+mon organisation et lorsqu'en 2006 j'ai commencé à lire et à
+m'interesser à la méthode GTD (`Getting Things Done`_) du très connu
+(outre-atlantique) David Allen, j'ai tout de suite essayé de
+l'appliquer à l'ensemble de mes projets.
+
+.. _Getting Things Done: http://fr.wikipedia.org/wiki/Getting_Things_Done
+
+J'ai essayé divers sites et outils web ou encore des plugins pour
+differents clients mail, mais aucun ne me satisfait. De plus je
+souhaitai un outil portable qui me permette de manipuler et de stocker
+ma liste sur une clef USB et qui me soit accessible depuis Linux ou
+Windows sans la necessitée d'une connexion à internet.
+
+.. _Gmail: http://saw.themurdaughs.com/gtd%20with%20gmail.pdf
+.. _GTDGmail: http://www.gtdgmail.com/
+.. _Tracks: http://www.rousette.org.uk/projects/
+.. _GTDTiddlyWiki: http://shared.snapgrid.com/gtd_tiddlywiki.html
+
+Les solutions qui me semblait les plus pérennes étaient celles qui se
+basaient sur de simples fichiers texte (cf `why plain text makes sense`_).
+
+.. _why plain text makes sense: http://ginatrapani.github.com/todo.txt-cli/
+
+Je me suis donc arreté sur les outils iKog_ et pyGTD_ [#]_, mais dans le
+premier il manquait la notion de priorité (cf `Seven Habits of Highly
+Effective People`_ de Stephen Covey) qui était présente dans le
+second, dans lequel faisait défaut la souplesse d'utilisation. J'ai
+alors entrepris de développer mon propre outil réunissant le meilleur
+des deux mondes : *yaGTD* est né !
+
+.. _iKog: http://www.henspace.co.uk/ikog/index.html
+.. _pyGTD: http://96db.com/pyGTD/
+.. [#] On a retrouvé PyGTD ! Le script PyGTD n'a pas disparu dans les 
+   limbes d'internet ! Il a servi à une distribution de GTD sous Vim, 
+   VimGTD_ (original ^^). Et on l'y retrouve en entier.
+.. _VimGTD: http://www.vim.org/scripts/script.php?script_id=1699
+
+.. _Seven Habits of Highly Effective People: http://www.amazon.com/exec/obidos/ASIN/0671708635/areadersjournal
+
+Licence
+=======
+
+yaGTD est fourni sous licence GPL, sans aucune garantie de
+fonctionnement. De même, les corrections de bugs et mises à jour ne
+sont pas garanties. Référez vous au fichier LICENCE (qui doit être
+inclus dans cette distribution) pour plus de détails sur les termes de
+la licence.
+
+Si certaines parties des librairies utilisés ne sont pas en accord
+avec la licence GPL, veuillez me contacter et je régulariserai cette
+situation.
+
+Éléments requis
+===============
+
+La seule dépendance requise est Python 2.3 ou supérieur.
+
+Théoriquement ce logiciel doit fonctionner sur toutes les 
+plates-formes.
+
+Usage
+=====
+
+Entrez simplement ::
+
+  $ python yagtd.py
+
+Pour plus de détails référez-vous à la documentation fournie dans le
+sous répertoire doc/.
+
+Pour une interface en ligne de commande (non-interactive) un wrapper
+``yagtd-cli.py`` est disponible dans le sous-répertoire tools/.
+
+Remarque
+========
+
+Un mode majeur pour Emacs, permettant d'éditer les to-do listes de
+yaGTD est disponible dans le sous-répertoire tools/.
+De même un script pour Symbian S60 (pyS60) y est disponible.
+
+-- 
+MiKael NAVARRO

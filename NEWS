@@ -1,0 +1,198 @@
+#
+# yaGTD - Yet Another Getting Things Done
+# A primitive Getting Things Done to-do list manager.
+#
+
+Next to come
+------------
+
+- Use a config file to set parametters (colors, ...).
+- Show details + colors.
+- Allow to reset an additional attribute.
+- Improve visibility of show (details) command.
+- Display item with empty context or project.
+- Review IO functions
+
+Changes New in release 0.3.4 - 30 July 2010
+-------------------------------------------
+
+- Add a wrapper 'yagtd-cli.py' (task#7119) to run commands
+  non-interactively.
+- Add a small shell script 'yagtd.sh' which IMHO gives a
+  typing-friendlier interface (task#7119).
+
+Changes New in release 0.3.3 - 29 June 2010
+-------------------------------------------
+
+- Add other date input format (D: as "mo", "tu", ..., "su").
+- Add a --quiet option for not printing the copyright message upon
+  startup (patch #1699).
+
+Changes New in release 0.3.2 - 23 April 2010
+--------------------------------------------
+
+- Fix bug (#13349) while loading a non-existing file.
+- Fix crash (bug #13987) when archive then order.
+- Modulate priority calculation when due date is overdue or when
+  status !someday is applied (task #6861).
+- By default set urgency of new tasks to current month.
+- Set the Due (target) date in +/- days (task #6585).
+- List tasks without context, i.e. in the inbox (task #6877).
+- Display the number of tasks found after a research.
+- An approach (patch #1172) to also printing out not otherwise printed
+  tasks (tasks that do not have contexts, projects, or other things).
+- Cmds 'overdue' and 'deadlines' to see tasks overdue or coming up
+  (patch #1366).
+- Display contexts and next task for each context (patch #1366).
+- Allow to use '+' (aka 'p:') to set project.
+- Update doc.
+
+Changes New in release 0.3.1 - 09 February 2010
+-----------------------------------------------
+
+- Add some shortcuts (for S60 platform).
+- Main program 'yagtd-s60.py' for S60 platform (Nokia Symbian OS) added.
+
+Changes New in release 0.3.0 - 06 November 2009
+-----------------------------------------------
+
+- Simple yagtd manpage (thks Max VOZELER).
+- Add start time after replace (bug #14686, Debian bug #545192).
+- Remember tasks planned for today (patch #1333).
+- Show usage/language reference.
+
+Changes New in release 0.2.9 - 17 September 2009
+------------------------------------------------
+
+- Fix recurrence calculation on start date when closed.
+
+Changes New in release 0.2.8 - 21 June 2009
+-------------------------------------------
+
+- Display urgency and importance label in detailed view.
+- Task #6319, archive completed tasks.
+
+Changes New in release 0.2.7 - 27 May 2009
+------------------------------------------
+
+- Task #6539, display a formatted line even in optim. mode.
+
+Changes New in release 0.2.6 - 15 April 2009
+--------------------------------------------
+
+- Task bug#13340, "today" command: todos only in today, and due in
+  today (Hu SONGTAO).
+- Task #6513, tasks must appear only after the Start date (Aurelien
+  BOMPARD).
+
+Changes New in release 0.2.5 - 18 March 2009
+--------------------------------------------
+
+- Fix bug#12793: "urgency" called with only one argument crashes yagtd
+  (thanks to Daniel SCHÜSSLER and Ward VANDEWEGE).
+- Add regexp filtering to listpri command (patch#1132)
+
+Changes New in release 0.2.4 - 23 May 2008
+--------------------------------------------
+
+- Allow to modify several tasks in one shot.
+
+Changes New in release 0.2.3 - 15 May 2008
+--------------------------------------------
+
+- Also print the summary after marking a task done.
+- Warn when we try to modify a task but it did not understand the id.
+- Prints the number of task as the result of the search, if it's
+  bigger than 10.
+
+Changes New in release 0.2.2 - 24 April 2008
+--------------------------------------------
+
+- Auto save todo.txt file at exit.
+- More detailled interactive help.
+- Check user inputs and display success ops.
+- Use positional argument instead of option for todo.txt file.
+
+Changes New in release 0.2.1 - 12 February 2008
+-----------------------------------------------
+
+- Add commands to set the urgency, the importance, the time requiered,
+  the target date, ...
+- Improve interactive help.
+
+Changes New in release 0.2.0 - 06 January 2008
+----------------------------------------------
+
+- Move watingfor, maybe, someday from context to status.
+
+Changes New in release 0.1.9 - 18 December 2007
+-----------------------------------------------
+
+- Don't show empty context/project/status/reference.
+- Fix closure of reccurring tasks.
+
+Changes New in release 0.1.8 - 29 November 2007
+-----------------------------------------------
+
+- Add Emacs major mode for editing yaGTD to-do lists.
+
+Changes New in release 0.1.7 - 02 October 2007
+----------------------------------------------
+
+- Filter searches with/without completed tasks.
+- Allow dashes in words for context and such ...
+
+Changes New in release 0.1.6 - 23 September 2007
+------------------------------------------------
+
+- Apply some smallish patches (extend, add, edit and status):
+  https://thomas.apestaart.org/thomas/trac/browser/patches/yagtd/patches
+- Save path to opened todo.txt file.
+- Rename main script gtd_cmd.py to yagtd.py
+
+Changes New in release 0.1.5 - 15 December 2006
+-----------------------------------------------
+
+- Add documentation (reviewed by Miguel DARDENNE).
+
+Changes New in release 0.1.4 - 10 December 2006
+-----------------------------------------------
+
+- Allow to order by contexts/projects/statuses.
+- Add summary command= display stats by projects.
+- Check that input commands are correctly formatted!
+- Manage recurrent tasks.
+- Remove useless YAML support.
+- Fix append/modify commands.
+- Set the start date automatically if not present.
+
+Changes New in release 0.1.3 - 03 December 2006
+-----------------------------------------------
+
+- Filter completed tasks.
+- Filter commented lines (#) while loading todotxt.
+- Add README, setup.py ...
+- Add edit/modif functions.
+- Fix modify function.
+- Add search function.
+- Add colorization.
+- Fix save function.
+- Fix load function (erase todo list before reloading).
+
+Changes New in release 0.1.2 - 25 November 2006
+--------------------------------------------
+
+- Check YAML module availability.
+- Improve line parsing (datetime and timedelta).
+
+Changes New in release 0.1.1 - 23 November 2006
+--------------------------------------------
+
+- Inherit Task from dict object.
+- Add a command line interface.
+
+New release 0.1.0 - 22 November 2006
+------------------------------------
+
+- First version based on pyGTD tool.
+

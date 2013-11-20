@@ -1,0 +1,11 @@
+Etudier GTD. @home p:GTD !Next U:3 I:5 C:90 T:40H S:2010-10-30
+Appliquer la methode GTD. @everywhere U:4 I:5 T:30M R:168H S:2006-12-16 D:2009-04-20
+notes (DB). @computer p:GTD ref:GTD U:2 I:3 C:100 T:1H S:2006-10-30
+pyGTD, DevTodo, todotxt. @home @computer p:GTD ref:GTD U:4 I:4 C:100 T:6H S:2006-10-30
+Notes Tomboy: desktop note taking program using wiki style. @computer p:GTD ref:GTD U:1 I:3 C:100 T:1H S:2006-10-30
+KNotes (KDE), Pense-bete (GNOME). @computer p:GTD ref:GTD U:2 I:3 C:100 T:20M S:2006-10-30
+Ameliorer Rhinote (et contacter l'auteur). @home @computer p:GTD U:3 I:4 C:40 T:24H S:2006-11-12 D:2009-04-14
+Scrawl-it (becquet = 12.7x7.7, 7.5x7.5; gtk, wxwin). @computer p:GTD U:3 I:4 C:40 T:1H S:2006-11-12
+Etudier le Mind-mapping. @home p:MindMapping U:2 I:3 T:1H S:2006-11-06
+Imprimer les tutoriaux. @computer @online p:MindMapping U:2 I:3 C:100 T:10M S:2006-11-06 E:2006-11-22
+LM revue de presse. @home @computer p:Doc U:1 I:3 T:1H R:720H S:2007-06-01 D:2007-07-01
