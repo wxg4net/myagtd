@@ -42,6 +42,9 @@ from math import sqrt, log
 
 import cmd
 
+reload(sys)
+sys.setdefaultencoding("utf-8")
+
 if __debug__: from pprint import pprint as pp
 
 from gtd import Task, ToDo
@@ -1420,17 +1423,19 @@ Type 'help' or '?' for more commands/options."""
             return 
             
         tasks = self.todo
-        rsync_up_num = rsync_down_num = 0
+        rsync_modify_num = rsync_down_num = 0
         for g_task in google_tasks:
-            #~ print g_task
             g_task_title = g_task['title'].encode('utf-8').strip()
             find = False
             for task in tasks:
-                if g_task_title == task['title']:
+                if g_task_title == task['title'].decode('utf-8'):
                     find = True
-                    if 'status' in g_task and 'complete' in task \
-                        and g_task['status'] == 'complete' and task['complete'] <> 100:
-                        self.do_modify("%d C:%d" % (task['id'], 100))
+                    if 'status' in g_task and g_task['status'].encode('utf-8') == u'completed':
+                        if 'complete' in task and task['complete'] == 100:
+                            pass
+                        else:
+                            rsync_modify_num += 1
+                            self.do_modify("%d C:%d" % (task['id'], 100))
                     break
                 
             if not find and g_task_title <> '':
@@ -1447,8 +1452,11 @@ Type 'help' or '?' for more commands/options."""
                 if 'status' in g_task :
                     if g_task['status'] == 'complete':
                         t['complete'] = 100
+                        
                 t_index = self.todo.add(t)
                 rsync_down_num += 1
+        if rsync_modify_num:
+            print 'modifyed %d Tasks from Google Tasks' % rsync_down_num
         if rsync_down_num:
             print 'downloaded %d Tasks from Google Tasks' % rsync_down_num
 
