@@ -1481,7 +1481,11 @@ Type 'help' or '?' for more commands/options."""
                 google_task = {
                     'title' : task['title']
                 }
-                gtasks.insert(google_task)
+                try:
+                    gtasks.insert(google_task)
+                except:
+                    print 'network error'
+                    return 
                 rsync_up_num += 1
         if rsync_modify_num:
             print 'modifyed %d Tasks from Google Tasks' % rsync_modify_num
