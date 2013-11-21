@@ -1428,7 +1428,8 @@ Type 'help' or '?' for more commands/options."""
             return
             
         tasks = self.todo
-        rsync_modify_num = rsync_down_num = 0
+        rsync_up_num = rsync_modify_num = rsync_down_num = 0
+        find_same_tasks = []
         for g_task in google_tasks:
             g_task_title = g_task['title'].encode('utf-8')
             g_task_title = STR_CLEAN_REGEXP.sub('', g_task_title)
@@ -1448,28 +1449,42 @@ Type 'help' or '?' for more commands/options."""
                     pass
                     #~ print g_task_title , task['title'], (g_task_title , task['title'])
                 
-            if not find and g_task_title <> '':
-
-                t = Task({
-                    'title': g_task_title, 
-                    'start': datetime.datetime(*(DT_parser.parse(g_task['updated']).timetuple()[:6]))
-                    })
-                if 'due' in g_task:
-                    t['due'] = datetime.datetime(*(DT_parser.parse(g_task['due']).timetuple()[:6]))
-    
-                if 'notes' in g_task:
-                    context = STR_CLEAN_REGEXP.sub('*', g_task['notes'].encode('utf-8'))
-                    t['context'] = [context]
-                if 'status' in g_task :
-                    if g_task_status == u'completed':
-                        t['complete'] = 100
-                        
-                t_index = self.todo.add(t)
-                rsync_down_num += 1
+            if g_task_title <> '':
+                if not find :
+                    t = Task({
+                        'title': g_task_title, 
+                        'start': datetime.datetime(*(DT_parser.parse(g_task['updated']).timetuple()[:6]))
+                        })
+                    if 'due' in g_task:
+                        t['due'] = datetime.datetime(*(DT_parser.parse(g_task['due']).timetuple()[:6]))
+        
+                    if 'notes' in g_task:
+                        context = STR_CLEAN_REGEXP.sub('*', g_task['notes'].encode('utf-8'))
+                        t['context'] = [context]
+                    if 'status' in g_task :
+                        if g_task_status == u'completed':
+                            t['complete'] = 100
+                    t_index = self.todo.add(t)
+                    rsync_down_num += 1
+                else:
+                    find_same_tasks.append(g_task_title)
+            else: 
+                pass
+        for task in tasks:
+            if task['title'] not in find_same_tasks:
+                if 'complete' in task and task['complete'] == 100 :
+                    continue
+                google_task = {
+                    'title' : task['title']
+                }
+                gtasks.insert(google_task)
+                rsync_up_num += 1
         if rsync_modify_num:
             print 'modifyed %d Tasks from Google Tasks' % rsync_modify_num
         if rsync_down_num:
             print 'downloaded %d Tasks from Google Tasks' % rsync_down_num
+        if rsync_up_num:
+            print 'uploaded %d Tasks from Google Tasks' % rsync_up_num
 
     #
     # Quit.
