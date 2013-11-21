@@ -1425,9 +1425,13 @@ Type 'help' or '?' for more commands/options."""
             print e
             return
         except KeyboardInterrupt:
+            print 'exited'
+            return
+        except :
+            print 'unkown Exception'
             return
             
-        tasks = self.todo
+        old_tasks = tasks = self.todo
         rsync_up_num = rsync_modify_num = rsync_down_num = 0
         find_same_tasks = []
         for g_task in google_tasks:
@@ -1467,10 +1471,10 @@ Type 'help' or '?' for more commands/options."""
                     t_index = self.todo.add(t)
                     rsync_down_num += 1
                 else:
-                    find_same_tasks.append(g_task_title)
+                    find_same_tasks.append( g_task_title)
             else: 
                 pass
-        for task in tasks:
+        for task in old_tasks:
             if task['title'] not in find_same_tasks:
                 if 'complete' in task and task['complete'] == 100 :
                     continue
