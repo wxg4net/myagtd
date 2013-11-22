@@ -131,7 +131,7 @@ WORD_MATCH      = r"(\S+)"
 DIGIT_MATCH     = r"([1-5])"
 NUMBER_MATCH    = r"(\d+)"
 TIMEDELTA_MATCH = r"(\d+)([WDHM])"
-DATE_MATCH      = r"(\d\d\d\d-\d\d-\d\d-\d\d)"
+DATE_MATCH      = r"(\d\d\d\d-\d\d-\d\d(?:-\d\d)?)"
 
 DOW             = ["mo", "tu", "we", "th", "fr", "sa", "su"]
 DOW_MATCH       = r"(" + "|".join (DOW) + ")"
@@ -284,7 +284,11 @@ class GTD(cmd.Cmd):
 
             matches = eval(attr.upper() + '_REGEXP').findall(line)
             if matches:
-                year, month, day, hour = matches[-1].split('-')  # keep only last!
+                try:
+                    year, month, day, hour = matches[-1].split('-')  # keep only last!
+                except:
+                    hour = 0
+                    year, month, day = matches[-1].split('-')  # keep only last!
                 t[attr] = datetime.datetime(int(year), int(month), int(day),  int(hour))
 
             else:  # check if it is in format of special day
