@@ -1419,12 +1419,14 @@ Type 'help' or '?' for more commands/options."""
     # rsync
     #
 
-    def do_rsync(self, nb):
+    def do_rsync(self, proxy_name):
         """rsync  tasks from Google tasks:
-        GTD> rsync """
-        
+        GTD> rsync [proxy=[g,goagent]]"""
+        goagent_proxy = False
+        if proxy_name.startswith('g'):
+            goagent_proxy = True
         try:
-            gtasks = Gtasks()
+            gtasks = Gtasks(goagent_proxy)
             google_tasks = gtasks.list()
         except Exception as e:
             print e

@@ -8,6 +8,7 @@ from apiclient.discovery import build
 import os
 import httplib2
 
+
 G_TASK_STATUS_COMPLETED = u'completed'
 G_TASK_STATUS_ACTION = u'completed'
 
@@ -23,7 +24,7 @@ class GoogleGtasks():
     #~ task[id] = MDU5MTA2MTMzMDM0MzE2Mzg5MzA6MDoxMzk5MDk5OTUy
     #~ task[selfLink]
     
-  def __init__(self):
+  def __init__(self, use_goagent=False):
     self.user_data_dir = os.sep.join([os.getenv("HOME"), '.yagtd++'])
     if not os.path.isdir(self.user_data_dir):
       try:
@@ -41,7 +42,10 @@ class GoogleGtasks():
     self.credentials = self.storage.get()
     
     #~ httplib2.debuglevel = 4
-    self.http = httplib2.Http()
+    if use_goagent:
+        self.http = httplib2.Http( proxy_info = httplib2.ProxyInfo(httplib2.socks.PROXY_TYPE_HTTP, 'localhost', 8087), disable_ssl_certificate_validation = True )
+    else:
+        self.http = httplib2.Http()
     
     if self.credentials is None or self.credentials.invalid:
       flow = flow_from_clientsecrets(self.client_secrets_file,
@@ -55,9 +59,8 @@ class GoogleGtasks():
     self.tasks = []
     
   def list(self):
-    
     try:
-        result = self.gtask.list(tasklist='@default').execute()
+        result = self.gtask.list(tasklist='@default').execute(num_retries=10)
     except:
         raise Exception('network error')
         
