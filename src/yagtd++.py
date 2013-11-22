@@ -51,7 +51,7 @@ if __debug__: from pprint import pprint as pp
 from gtd import Task, ToDo
 import gtd
 from gtdgooglelib import GoogleGtasks as Gtasks
-import datetime, pytz
+import datetime
 from dateutil import parser as DT_parser
 
 # Global variables
@@ -155,6 +155,7 @@ DUE_DOW_REGEXP    = re.compile(DUE_CHAR + DOW_MATCH, re.IGNORECASE)
 END_DOW_REGEXP    = re.compile(END_CHAR + DOW_MATCH, re.IGNORECASE)
 
 STR_CLEAN_REGEXP    = re.compile(r'([\s!@]+)')
+STR_CLEAN_REPLACE    = '#'
 
 #
 # Main GTD class.
@@ -283,7 +284,7 @@ class GTD(cmd.Cmd):
 
             matches = eval(attr.upper() + '_REGEXP').findall(line)
             if matches:
-                year, month, day,hour = matches[-1].split('-')  # keep only last!
+                year, month, day, hour = matches[-1].split('-')  # keep only last!
                 t[attr] = datetime.datetime(int(year), int(month), int(day),  int(hour))
 
             else:  # check if it is in format of special day
@@ -1436,7 +1437,7 @@ Type 'help' or '?' for more commands/options."""
         find_same_tasks = []
         for g_task in google_tasks:
             g_task_title = g_task['title'].encode('utf-8')
-            g_task_title = STR_CLEAN_REGEXP.sub('', g_task_title)
+            g_task_title = STR_CLEAN_REGEXP.sub(STR_CLEAN_REPLACE, g_task_title)
             g_task_status = g_task['status'].encode('utf-8')
             find = False
             for task in tasks:
@@ -1463,7 +1464,7 @@ Type 'help' or '?' for more commands/options."""
                         t['due'] = datetime.datetime(*(DT_parser.parse(g_task['due']).timetuple()[:6]))
         
                     if 'notes' in g_task:
-                        context = STR_CLEAN_REGEXP.sub('*', g_task['notes'].encode('utf-8'))
+                        context = STR_CLEAN_REGEXP.sub(STR_CLEAN_REPLACE, g_task['notes'].encode('utf-8'))
                         t['context'] = [context]
                     if 'status' in g_task :
                         if g_task_status == u'completed':
