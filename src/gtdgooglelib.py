@@ -56,11 +56,12 @@ class GoogleGtasks():
     self.http = self.credentials.authorize(self.http)
     self.service = build('tasks', 'v1', http=self.http)
     self.gtask = self.service.tasks()
+    self.num_retries=5
     self.tasks = []
     
   def list(self):
     try:
-        result = self.gtask.list(tasklist='@default').execute(num_retries=10)
+        result = self.gtask.list(tasklist='@default').execute(self.num_retries)
     except:
         raise Exception('network error')
         
@@ -81,7 +82,7 @@ class GoogleGtasks():
     delete(tasklist='@default', task=task_id).execute()
     
   def insert(self, task):
-    self.gtask.insert(tasklist='@default', body=task).execute()
+    self.gtask.insert(tasklist='@default', body=task).execute(self.num_retries)
     
     
 def main():
