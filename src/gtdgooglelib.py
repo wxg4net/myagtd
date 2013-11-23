@@ -33,11 +33,15 @@ class GoogleGtasks():
         raise Exception('OSError')
         
     self.credentials_file = os.sep.join([self.user_data_dir, 'credentials.dat'])
-    self.client_secrets_file = '/usr/share/yagtd++/client_secrets.json'
     
-    if not os.path.isfile(self.client_secrets_file):
+    self.client_secrets_files = ''
+    for csf in ('/usr/share/yagtd++/client_secrets.json', 'client_secrets.json'):
+        if os.path.isfile(csf):
+            self.client_secrets_files = csf
+            break
+    if self.client_secrets_files == '':
         raise Exception('client_secrets.json not exits')
-        
+            
     self.storage = Storage(self.credentials_file)
     self.credentials = self.storage.get()
     
@@ -53,6 +57,7 @@ class GoogleGtasks():
                                  redirect_uri='urn:ietf:wg:oauth:2.0:oob')
       self.credentials = run(flow, self.storage)
       self.storage.put(self.credentials)
+      
     self.http = self.credentials.authorize(self.http)
     self.service = build('tasks', 'v1', http=self.http)
     self.gtask = self.service.tasks()
@@ -61,10 +66,9 @@ class GoogleGtasks():
     
   def list(self):
     try:
-        result = self.gtask.list(tasklist='@default').execute(self.num_retries)
+        result = self.gtask.list(tasklist='@default').execute(num_retries=self.num_retries)
     except:
         raise Exception('network error')
-        
     tasks = result.get('items', [])
     return tasks
 
@@ -72,7 +76,7 @@ class GoogleGtasks():
     pass
     
   def get(self, task_id):
-    task = service.tasks().get(tasklist='@default', task=task_id).execute()
+    task = service.tasks().get(tasklist='@default', task=task_id).execute(num_retries=self.num_retries)
     return task
 
   def update(self, task_id, task):
@@ -82,13 +86,13 @@ class GoogleGtasks():
     delete(tasklist='@default', task=task_id).execute()
     
   def insert(self, task):
-    self.gtask.insert(tasklist='@default', body=task).execute(self.num_retries)
+    self.gtask.insert(tasklist='@default', body=task).execute(num_retries=self.num_retries)
     
     
 def main():
   gt = GoogleGtasks()
+  # for test
   print gt.list()
-  pass
   
 if __name__ == "__main__":
   main()

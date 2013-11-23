@@ -156,7 +156,7 @@ DUE_DOW_REGEXP    = re.compile(DUE_CHAR + DOW_MATCH, re.IGNORECASE)
 END_DOW_REGEXP    = re.compile(END_CHAR + DOW_MATCH, re.IGNORECASE)
 
 STR_CLEAN_REGEXP    = re.compile(r'([\s!@]+)')
-STR_CLEAN_REPLACE    = '#'
+STR_CLEAN_REPLACE    = ''
 
 #
 # Main GTD class.
