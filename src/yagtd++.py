@@ -53,7 +53,7 @@ from gtd import Task, ToDo
 import gtd
 from gtdgooglelib import GoogleGtasks as Gtasks
 import datetime, time
-from datetime from timedelta
+from datetime import timedelta
 from dateutil import parser as DT_parser
 
 # Global variables
