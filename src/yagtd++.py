@@ -53,7 +53,8 @@ from gtd import Task, ToDo
 import gtd
 from gtdgooglelib import GoogleGtasks as Gtasks
 import datetime, time
-from dateutil import timedelta, parser as DT_parser
+from datetime from timedelta
+from dateutil import parser as DT_parser
 
 # Global variables
 TODO_DIR    = "."
