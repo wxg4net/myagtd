@@ -52,8 +52,8 @@ if __debug__: from pprint import pprint as pp
 from gtd import Task, ToDo
 import gtd
 from gtdgooglelib import GoogleGtasks as Gtasks
-import datetime
-from dateutil import parser as DT_parser
+import datetime, time
+from dateutil import timedelta, parser as DT_parser
 
 # Global variables
 TODO_DIR    = "."
@@ -1462,12 +1462,14 @@ Type 'help' or '?' for more commands/options."""
                 
             if g_task_title <> '':
                 if not find :
+                    update_date = DT_parser.parse(g_task['updated']) - datetime.timedelta(hours=(time.timezone/3600))
                     t = Task({
                         'title': g_task_title, 
-                        'start': datetime.datetime(*(DT_parser.parse(g_task['updated']).timetuple()[:6]))
+                        'start': datetime.datetime(*(update_date.timetuple()[:6]))
                         })
                     if 'due' in g_task:
-                        t['due'] = datetime.datetime(*(DT_parser.parse(g_task['due']).timetuple()[:6]))
+                        due_date = DT_parser.parse(g_task['due']) - datetime.timedelta(hours=(time.timezone/3600))
+                        t['due'] = datetime.datetime(*(due_date.timetuple()[:6]))
         
                     if 'notes' in g_task:
                         context = STR_CLEAN_REGEXP.sub(STR_CLEAN_REPLACE, g_task['notes'].encode('utf-8'))

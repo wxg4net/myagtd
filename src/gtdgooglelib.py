@@ -90,7 +90,7 @@ class GoogleGtasks():
     
     
 def main():
-  gt = GoogleGtasks()
+  gt = GoogleGtasks(True)
   # for test
   print gt.list()
   
