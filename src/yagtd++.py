@@ -53,7 +53,6 @@ from gtd import Task, ToDo
 import gtd
 from gtdgooglelib import GoogleGtasks as Gtasks
 import datetime, time
-from datetime import timedelta
 from dateutil import parser as DT_parser
 
 # Global variables
@@ -1424,6 +1423,7 @@ Type 'help' or '?' for more commands/options."""
     def do_rsync(self, proxy_name):
         """rsync  tasks from Google tasks:
         GTD> rsync [proxy=[g,goagent]]"""
+        
         goagent_proxy = False
         if proxy_name.startswith('g'):
             goagent_proxy = True
@@ -1443,10 +1443,12 @@ Type 'help' or '?' for more commands/options."""
         old_tasks = copy.deepcopy(self.todo)
         rsync_up_num = rsync_modify_num = rsync_down_num = 0
         find_same_tasks = []
+        
         for g_task in google_tasks:
             g_task_title = g_task['title'].encode('utf-8')
             g_task_title = STR_CLEAN_REGEXP.sub(STR_CLEAN_REPLACE, g_task_title)
             g_task_status = g_task['status'].encode('utf-8')
+            
             find = False
             for task in old_tasks:
                 if g_task_title == task['title']:
@@ -1503,7 +1505,8 @@ Type 'help' or '?' for more commands/options."""
             print 'downloaded %d Tasks from Google Tasks' % rsync_down_num
         if rsync_up_num:
             print 'uploaded %d Tasks from Google Tasks' % rsync_up_num
-
+            
+    do_r = do_rsync
     #
     # Quit.
     #
