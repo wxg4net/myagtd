@@ -7,7 +7,8 @@ from oauth2client.tools import run
 from apiclient.discovery import build
 import os
 import httplib2
-
+import logging  
+logging.basicConfig(level = logging.ERROR)  
 
 G_TASK_STATUS_COMPLETED = u'completed'
 G_TASK_STATUS_ACTION = u'completed'
