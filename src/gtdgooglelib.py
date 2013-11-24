@@ -76,14 +76,14 @@ class GoogleGtasks():
     pass
     
   def get(self, task_id):
-    task = service.tasks().get(tasklist='@default', task=task_id).execute(num_retries=self.num_retries)
+    task = self.gtask.get(tasklist='@default', task=task_id).execute(num_retries=self.num_retries)
     return task
 
   def update(self, task_id, task):
-    service.tasks().update(tasklist='@default', task=task_id, body=task).execute()
+    self.gtask.update(tasklist='@default', task=task_id, body=task).execute(num_retries=self.num_retries)
 
   def delete(self, task_id):
-    delete(tasklist='@default', task=task_id).execute()
+    self.gtask.delete(tasklist='@default', task=task_id).execute(num_retries=self.num_retries)
     
   def insert(self, task):
     self.gtask.insert(tasklist='@default', body=task).execute(num_retries=self.num_retries)

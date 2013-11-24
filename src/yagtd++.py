@@ -1441,7 +1441,7 @@ Type 'help' or '?' for more commands/options."""
             return
             
         old_tasks = copy.deepcopy(self.todo)
-        rsync_up_num = rsync_modify_num = rsync_down_num = 0
+        rsync_up_num = rsync_modify_num = rsync_down_num = rsync_delete_num = 0
         find_same_tasks = []
         
         for g_task in google_tasks:
@@ -1462,7 +1462,7 @@ Type 'help' or '?' for more commands/options."""
                     break
                 else:
                     pass
-                
+            g_task_delete = False
             if g_task_title <> '':
                 if not find :
                     update_date = DT_parser.parse(g_task['updated']) - datetime.timedelta(hours=(time.timezone/3600))
@@ -1479,13 +1479,21 @@ Type 'help' or '?' for more commands/options."""
                         t['context'] = [context]
                     if 'status' in g_task :
                         if g_task_status == u'completed':
+                            g_task_delete = True
                             t['complete'] = 100
                     t_index = self.todo.add(t)
                     rsync_down_num += 1
                 else:
                     find_same_tasks.append( g_task_title)
             else: 
-                pass
+                g_task_delete = True
+            if g_task_delete:
+                try:
+                    gtasks.delete(g_task['id'])
+                    rsync_delete_num += 1
+                except:
+                    print 'network error'
+                    continue 
         for task in old_tasks:
             if task['title'] not in find_same_tasks:
                 if 'complete' in task and task['complete'] == 100 :
@@ -1497,15 +1505,12 @@ Type 'help' or '?' for more commands/options."""
                     gtasks.insert(google_task)
                 except:
                     print 'network error'
-                    return 
+                    continue 
                 rsync_up_num += 1
-        if rsync_modify_num:
-            print 'modifyed %d Tasks from Google Tasks' % rsync_modify_num
-        if rsync_down_num:
-            print 'downloaded %d Tasks from Google Tasks' % rsync_down_num
-        if rsync_up_num:
-            print 'uploaded %d Tasks from Google Tasks' % rsync_up_num
-            
+                
+        if rsync_down_num or rsync_up_num or rsync_modify_num or rsync_delete_num:
+            print 'downloaded:%d uploaded:%d modifyed:%d deleted:%d Tasks from Google Tasks' % (rsync_down_num, rsync_up_num, rsync_modify_num, rsync_delete_num)
+
     do_r = do_rsync
     #
     # Quit.
