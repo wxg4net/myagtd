@@ -1512,6 +1512,16 @@ Type 'help' or '?' for more commands/options."""
             print 'downloaded:%d uploaded:%d modifyed:%d deleted:%d Tasks from Google Tasks' % (rsync_down_num, rsync_up_num, rsync_modify_num, rsync_delete_num)
 
     do_r = do_rsync
+    
+    #
+    # rsync_goagent.
+    #
+    
+    def do_rsync_goagent(self, line=None):
+        self.do_rsync('g')
+        
+    do_rg = do_rsync_goagent
+    
     #
     # Quit.
     #
