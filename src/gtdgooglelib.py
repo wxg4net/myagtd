@@ -37,20 +37,20 @@ class GoogleGtasks():
     
     self.client_secrets_files = ''
     for csf in ('/usr/share/yagtd++/client_secrets.json', 'client_secrets.json'):
-        if os.path.isfile(csf):
-            self.client_secrets_files = csf
-            break
+      if os.path.isfile(csf):
+        self.client_secrets_files = csf
+        break
     if self.client_secrets_files == '':
-        raise Exception('client_secrets.json not exits')
+      raise Exception('client_secrets.json not exits')
             
     self.storage = Storage(self.credentials_file)
     self.credentials = self.storage.get()
     
     #~ httplib2.debuglevel = 4
     if use_goagent:
-        self.http = httplib2.Http( proxy_info = httplib2.ProxyInfo(httplib2.socks.PROXY_TYPE_HTTP, 'localhost', 8087), disable_ssl_certificate_validation = True )
+      self.http = httplib2.Http( proxy_info = httplib2.ProxyInfo(httplib2.socks.PROXY_TYPE_HTTP, 'localhost', 8087), disable_ssl_certificate_validation = True )
     else:
-        self.http = httplib2.Http()
+      self.http = httplib2.Http()
     
     if self.credentials is None or self.credentials.invalid:
       flow = flow_from_clientsecrets(self.client_secrets_file,
@@ -67,9 +67,9 @@ class GoogleGtasks():
     
   def list(self):
     try:
-        result = self.gtask.list(tasklist='@default').execute(num_retries=self.num_retries)
+      result = self.gtask.list(tasklist='@default').execute(num_retries=self.num_retries)
     except:
-        raise Exception('network error')
+      raise Exception('network error')
     tasks = result.get('items', [])
     return tasks
 

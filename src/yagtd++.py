@@ -155,7 +155,7 @@ START_DOW_REGEXP  = re.compile(START_CHAR + DOW_MATCH, re.IGNORECASE)
 DUE_DOW_REGEXP    = re.compile(DUE_CHAR + DOW_MATCH, re.IGNORECASE)
 END_DOW_REGEXP    = re.compile(END_CHAR + DOW_MATCH, re.IGNORECASE)
 
-STR_CLEAN_REGEXP    = re.compile(r'([\s!@]+)')
+STR_CLEAN_REGEXP    = re.compile(r'([!@]+)')
 STR_CLEAN_REPLACE    = ''
 
 #
@@ -177,7 +177,7 @@ class GTD(cmd.Cmd):
         self.todotxt = TODO_TXT
         self.donetxt = DONE_TXT
 
-        self.colorize = False
+        self.colorize = True
         self.tasks_selected = []
 
     #
@@ -191,7 +191,7 @@ class GTD(cmd.Cmd):
         
         # Parse command args
         n = re.search(r"^(?x)(\d+)", args)  # num
-        s = re.search(r" +([@!:\+\-\w ]+)$", args)  # string
+        s = re.search(r" +([@!:\+\-\S ]+)$", args)  # string
 
         if n: num = int(n.group(1))
         if s: string = s.group(1)
@@ -1444,10 +1444,13 @@ Type 'help' or '?' for more commands/options."""
         rsync_up_num = rsync_modify_num = rsync_down_num = rsync_delete_num = 0
         find_same_tasks = []
         
+        _google_tasks = []
         for g_task in google_tasks:
             g_task_title = g_task['title'].encode('utf-8')
             g_task_title = STR_CLEAN_REGEXP.sub(STR_CLEAN_REPLACE, g_task_title)
             g_task_status = g_task['status'].encode('utf-8')
+            
+            _google_tasks.append((g_task['id'], g_task_title))
             
             find = False
             for task in old_tasks:
@@ -1457,6 +1460,7 @@ Type 'help' or '?' for more commands/options."""
                             pass
                         else:
                             rsync_modify_num += 1
+                            g_task_delete = True
                             self.do_modify("%d C:%d" % (task['id'], 100))
                     find = True
                     break
@@ -1466,17 +1470,26 @@ Type 'help' or '?' for more commands/options."""
             if g_task_title <> '':
                 if not find :
                     update_date = DT_parser.parse(g_task['updated']) - datetime.timedelta(hours=(time.timezone/3600))
-                    t = Task({
-                        'title': g_task_title, 
-                        'start': datetime.datetime(*(update_date.timetuple()[:6]))
-                        })
+                    
+                    t = Task({'start': datetime.datetime(*(update_date.timetuple()[:6]))})
+                    
+                    if 'parent' in g_task:
+                        g_task_parent_title = [g for g in _google_tasks if  g[0]==g_task['parent']][0][1]
+                        g_task_parent_title = g_task_parent_title.decode('utf-8')[0:5].encode('utf-8')+'...'
+                        t['context'] = [ g_task_parent_title ]
+                        
+                    t['title'] = g_task_title
+                    
                     if 'due' in g_task:
                         due_date = DT_parser.parse(g_task['due']) - datetime.timedelta(hours=(time.timezone/3600))
                         t['due'] = datetime.datetime(*(due_date.timetuple()[:6]))
         
                     if 'notes' in g_task:
                         context = STR_CLEAN_REGEXP.sub(STR_CLEAN_REPLACE, g_task['notes'].encode('utf-8'))
-                        t['context'] = [context]
+                        if 'context' in t:
+                            t['context'] += [context]
+                        else:
+                            t['context']  = [context]
                     if 'status' in g_task :
                         if g_task_status == u'completed':
                             g_task_delete = True
