@@ -3,7 +3,7 @@
 
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
-from oauth2client.tools import run
+from oauth2client.tools import run_flow
 from apiclient.discovery import build
 import os
 import httplib2
@@ -12,6 +12,13 @@ logging.basicConfig(level = logging.ERROR)
 
 G_TASK_STATUS_COMPLETED = u'completed'
 G_TASK_STATUS_ACTION = u'completed'
+
+class gflags :
+  auth_host_name = 'localhost'
+  auth_host_port = [8083, 8084, 8085, 8090]
+  logging_level = 'ERROR'
+  noauth_local_webserver = False
+  
 
 class GoogleGtasks():
   
@@ -53,10 +60,10 @@ class GoogleGtasks():
       self.http = httplib2.Http()
     
     if self.credentials is None or self.credentials.invalid:
-      flow = flow_from_clientsecrets(self.client_secrets_file,
+      flow = flow_from_clientsecrets(self.client_secrets_files,
                                  scope='https://www.googleapis.com/auth/tasks',
                                  redirect_uri='urn:ietf:wg:oauth:2.0:oob')
-      self.credentials = run(flow, self.storage)
+      self.credentials = run_flow(flow, self.storage, gflags)
       self.storage.put(self.credentials)
       
     self.http = self.credentials.authorize(self.http)
