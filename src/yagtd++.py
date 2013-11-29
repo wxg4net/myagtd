@@ -43,6 +43,7 @@ from math import sqrt, log
 
 import cmd
 import copy
+import dbus
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -177,7 +178,7 @@ class GTD(cmd.Cmd):
         self.todotxt = TODO_TXT
         self.donetxt = DONE_TXT
 
-        self.colorize = True
+        self.colorize = False
         self.tasks_selected = []
 
     #
@@ -1281,6 +1282,14 @@ class GTD(cmd.Cmd):
             try:
                 for t in self.todo:
                     f.write(self._dump_line(t) + "\n")
+                    
+                tasks = [ self._disp(t).strip() for t in self.todo if t['complete'] < 100 ]
+                sessionBus = dbus.SessionBus()
+                awesomeWidgetObject = sessionBus.get_object('org.freedesktop.AwesomeWidget', '/')
+                awesomeWidgetTaskUpdate = awesomeWidgetObject.get_dbus_method('Update', 'org.freedesktop.AwesomeWidget.Task')
+                awesomeWidgetTaskUpdate('\n'.join(tasks))
+            except:
+                pass
             finally:
                 f.close()
                 print "%d tasks saved as '%s'" % (len(self.todo), todotxt)
