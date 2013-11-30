@@ -1272,6 +1272,18 @@ class GTD(cmd.Cmd):
 
     do_l = do_load
 
+    def do_updateWidgetTask(self, widget=None):
+        try:
+            tasks = [ self._disp(t).strip() for t in self.todo if t['complete'] < 100 ]
+            sessionBus = dbus.SessionBus()
+            awesomeWidgetObject = sessionBus.get_object('org.freedesktop.AwesomeWidget', '/')
+            awesomeWidgetTaskUpdate = awesomeWidgetObject.get_dbus_method('Update', 'org.freedesktop.AwesomeWidget.Task')
+            awesomeWidgetTaskUpdate('\n'.join(tasks))
+        except:
+            print 'updated task widget failed'
+            
+    do_uwt = do_updateWidgetTask
+    
     def do_save(self, todotxt):
         """Save to a todotxt file:
         GTD> save [path/to/todo.txt]"""
@@ -1283,11 +1295,7 @@ class GTD(cmd.Cmd):
                 for t in self.todo:
                     f.write(self._dump_line(t) + "\n")
                     
-                tasks = [ self._disp(t).strip() for t in self.todo if t['complete'] < 100 ]
-                sessionBus = dbus.SessionBus()
-                awesomeWidgetObject = sessionBus.get_object('org.freedesktop.AwesomeWidget', '/')
-                awesomeWidgetTaskUpdate = awesomeWidgetObject.get_dbus_method('Update', 'org.freedesktop.AwesomeWidget.Task')
-                awesomeWidgetTaskUpdate('\n'.join(tasks))
+                self.do_updateWidgetTask()
             except:
                 pass
             finally:
