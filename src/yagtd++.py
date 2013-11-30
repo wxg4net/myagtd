@@ -1291,6 +1291,7 @@ class GTD(cmd.Cmd):
     do_l = do_load
 
     def do_updateWidgetTask(self, widget=None):
+        """ updateWidgetTask for awesome"""
         try:
             tasks = [ self._disp(t).strip() for t in self.todo if t['complete'] < 100 ]
             sessionBus = dbus.SessionBus()
@@ -1571,6 +1572,7 @@ Type 'help' or '?' for more commands/options."""
     do_rg = do_rsync_goagent
     
     def do_check(self, nb = None):
+        """ check """
         nb = self._parse_args(nb)[0]
         now = datetime.datetime.now()
         todos = [ t for t in self.todo.sort() if t['complete'] < 100 and t['start'] < now ] 
@@ -1582,7 +1584,7 @@ Type 'help' or '?' for more commands/options."""
                 break
             pynotify.init(str(task['id']))
             task_notify = pynotify.Notification(task['title']+ ' 开始于 '+task['start'].strftime("%Y-%m-%d-%H"))
-            task_notify.show ()
+            task_notify.show()
             index += 1
     #
     # Quit.
