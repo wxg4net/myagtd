@@ -818,7 +818,24 @@ class GTD(cmd.Cmd):
 
         if idx and date and re.match(DATE_MATCH, date):
             self.do_modify("%d S:%s" % (idx, date))
+            
+    def do_startafter(self, id_don):
+        """Set the Start / creation date:
+        GTD> startafter #id +/-days"""
 
+        # Parse command line
+        idx, days_onset = self._parse_args(id_don)
+        
+        if idx and days_onset:
+            # Compute the new date= now + days_offset
+            now = datetime.datetime.now()
+            dayend = now + datetime.timedelta(int(days_onset))
+            date = dayend.strftime("%Y-%m-%d-%H")
+
+            self.do_modify("%d S:%s" % (idx, date))
+            
+    do_st = do_startafter
+    
     def do_due(self, id_date):
         """Set the Due (target) date:
         GTD> due #id YYYY-MM-DD"""
