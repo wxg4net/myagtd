@@ -44,6 +44,7 @@ from math import sqrt, log
 import cmd
 import copy
 import dbus
+import pynotify
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -1552,6 +1553,20 @@ Type 'help' or '?' for more commands/options."""
         
     do_rg = do_rsync_goagent
     
+    def do_check(self, nb = None):
+        nb = self._parse_args(nb)[0]
+        now = datetime.datetime.now()
+        todos = [ t for t in self.todo.sort() if t['complete'] < 100 and t['start'] < now ] 
+        index = 1
+        if nb is None:
+            nb = 1
+        for task in todos:
+            if int(nb) < index:
+                break
+            pynotify.init(str(task['id']))
+            task_notify = pynotify.Notification(task['title']+ ' 开始于 '+task['start'].strftime("%Y-%m-%d-%H"))
+            task_notify.show ()
+            index += 1
     #
     # Quit.
     #
