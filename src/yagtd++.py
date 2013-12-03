@@ -1489,6 +1489,7 @@ Type 'help' or '?' for more commands/options."""
             _google_tasks.append((g_task['id'], g_task_title))
             
             find = False
+            g_task_delete = False
             for task in old_tasks:
                 if g_task_title == task['title']:
                     if 'status' in g_task and g_task_status == u'completed':
@@ -1496,13 +1497,17 @@ Type 'help' or '?' for more commands/options."""
                             pass
                         else:
                             rsync_modify_num += 1
-                            g_task_delete = True
                             self.do_modify("%d C:%d" % (task['id'], 100))
+                        g_task_delete = True
+                    elif 'complete' in task and task['complete'] == 100:
+                        g_task_delete = True
+                    else:
+                        pass
                     find = True
                     break
                 else:
                     pass
-            g_task_delete = False
+            
             if g_task_title <> '':
                 if not find :
                     update_date = DT_parser.parse(g_task['updated']) - datetime.timedelta(hours=(time.timezone/3600))
