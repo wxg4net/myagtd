@@ -155,7 +155,7 @@ START_DOW_REGEXP  = re.compile(START_CHAR + DOW_MATCH, re.IGNORECASE)
 DUE_DOW_REGEXP    = re.compile(DUE_CHAR + DOW_MATCH, re.IGNORECASE)
 END_DOW_REGEXP    = re.compile(END_CHAR + DOW_MATCH, re.IGNORECASE)
 
-STR_CLEAN_REGEXP    = re.compile(r'([!@]+)')
+STR_CLEAN_REGEXP    = re.compile(r'([!@\n]+)')
 STR_CLEAN_REPLACE    = ''
 
 #
@@ -1493,7 +1493,7 @@ Type 'help' or '?' for more commands/options."""
                 if not find :
                     update_date = DT_parser.parse(g_task['updated']) - datetime.timedelta(hours=(time.timezone/3600))
                     
-                    t = Task({'start': datetime.datetime(*(update_date.timetuple()[:6]))})
+                    t = Task({'start': datetime.datetime(*(update_date.timetuple()[:6])), 'context': []})
                     
                     if 'parent' in g_task:
                         g_task_parent_title = [g for g in _google_tasks if  g[0]==g_task['parent']][0][1]
@@ -1512,10 +1512,12 @@ Type 'help' or '?' for more commands/options."""
                             t['context'] += [context]
                         else:
                             t['context']  = [context]
+                            
                     if 'status' in g_task :
                         if g_task_status == u'completed':
                             g_task_delete = True
                             t['complete'] = 100
+                            
                     t_index = self.todo.add(t)
                     rsync_down_num += 1
                 else:
