@@ -1510,10 +1510,9 @@ Type 'help' or '?' for more commands/options."""
             
             if g_task_title <> '':
                 if not find :
+                    T = Task()
                     update_date = DT_parser.parse(g_task['updated']) - datetime.timedelta(hours=(time.timezone/3600))
-                    
-                    t = Task({'start': datetime.datetime(*(update_date.timetuple()[:6])), 'context': []})
-                    
+                    t = {'start': datetime.datetime(*(update_date.timetuple()[:6]))}
                     if 'parent' in g_task:
                         g_task_parent_title = [g for g in _google_tasks if  g[0]==g_task['parent']][0][1]
                         g_task_parent_title = g_task_parent_title.decode('utf-8')[0:5].encode('utf-8')+'...'
@@ -1536,8 +1535,8 @@ Type 'help' or '?' for more commands/options."""
                         if g_task_status == u'completed':
                             g_task_delete = True
                             t['complete'] = 100
-                            
-                    t_index = self.todo.add(t)
+                    T.add(**t)
+                    t_index = self.todo.add(T)
                     rsync_down_num += 1
                 else:
                     find_same_tasks.append( g_task_title)
