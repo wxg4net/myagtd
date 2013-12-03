@@ -1293,7 +1293,7 @@ class GTD(cmd.Cmd):
     def do_updateWidgetTask(self, widget=None):
         """ updateWidgetTask for awesome"""
         try:
-            tasks = [ self._disp(t).strip() for t in self.todo if t['complete'] < 100 ]
+            tasks = [ self._disp(t).strip() for t in self.todo.sort() if t['complete'] < 100 ]
             sessionBus = dbus.SessionBus()
             awesomeWidgetObject = sessionBus.get_object('org.freedesktop.AwesomeWidget', '/')
             awesomeWidgetTaskUpdate = awesomeWidgetObject.get_dbus_method('Update', 'org.freedesktop.AwesomeWidget.Task')
