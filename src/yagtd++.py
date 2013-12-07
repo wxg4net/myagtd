@@ -1581,10 +1581,12 @@ Type 'help' or '?' for more commands/options."""
         """ check """
         nb = self._parse_args(nb)[0]
         now = datetime.datetime.now()
-        todos = [ t for t in self.todo.sort() if t['complete'] < 100 and t['start'] < now ] 
+        end = now + datetime.timedelta(hours=1)
+        todos = [ t for t in self.todo.sort() if t['complete'] < 100 and ( (t['start'] > now and t['start'] < end) or \
+            (t['due'] is not None and t['due'] > now and t['due'] < end ) ) ] 
         index = 1
         if nb is None:
-            nb = 1
+            nb = 2
         for task in todos:
             if int(nb) < index:
                 break
