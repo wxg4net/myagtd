@@ -828,8 +828,13 @@ class GTD(cmd.Cmd):
         
         if idx and days_onset:
             # Compute the new date= now + days_offset
+            s = re.search('(\d)h', days_onset, re.I)
+            if s:
+                hours = int(s.group(1))
+            else:
+                hours = int(days_onset)*24
             now = datetime.datetime.now()
-            dayend = now + datetime.timedelta(int(days_onset))
+            dayend = now + datetime.timedelta(hours=hours)
             date = dayend.strftime("%Y-%m-%d-%H")
 
             self.do_modify("%d S:%s" % (idx, date))
