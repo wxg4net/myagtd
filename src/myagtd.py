@@ -45,6 +45,7 @@ import cmd
 import copy
 import dbus
 import pynotify
+from subprocess import Popen, PIPE, STDOUT
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -53,7 +54,8 @@ if __debug__: from pprint import pprint as pp
 
 from gtd import Task, ToDo
 import gtd
-from gtdgooglelib import GoogleGtasks as Gtasks
+from gtdplus import Gtasks, Project
+
 import datetime, time
 from dateutil import parser as DT_parser
 
@@ -134,7 +136,7 @@ WORD_MATCH      = r"(\S+)"
 DIGIT_MATCH     = r"([1-5])"
 NUMBER_MATCH    = r"(\d+)"
 TIMEDELTA_MATCH = r"(\d+)([WDHM])"
-DATE_MATCH      = r"(\d\d\d\d-\d\d-\d\d(?:-\d\d)?)"
+DATE_MATCH      = r"(\d\d\d\d-\d\d-\d\d(?:-\d\d(?:-\d\d)?)?)"
 
 DOW             = ["mo", "tu", "we", "th", "fr", "sa", "su"]
 DOW_MATCH       = r"(" + "|".join (DOW) + ")"
@@ -176,16 +178,20 @@ class GTD(cmd.Cmd):
         self.prompt = "GTD> "
         self.todo = ToDo()  # the to-do list is here!
 
+        self.pro = Project()
+        
         self.todotxt = TODO_TXT
         self.donetxt = DONE_TXT
 
         self.colorize = False
         self.tasks_selected = []
 
+    def emptyline(self):
+        pass
+        
     #
     # Private functions.
     #
-
     def _parse_args(self, args):
         """Parse command arguments= num + str."""
 
@@ -288,11 +294,12 @@ class GTD(cmd.Cmd):
             matches = eval(attr.upper() + '_REGEXP').findall(line)
             if matches:
                 try:
-                    year, month, day, hour = matches[-1].split('-')  # keep only last!
+                    year, month, day, hour, minute = matches[-1].split('-')  # keep only last!
                 except:
-                    hour = 0
+                    hour   = datetime.datetime.now().strftime("%H")
+                    minute = datetime.datetime.now().strftime("%M")
                     year, month, day = matches[-1].split('-')  # keep only last!
-                t[attr] = datetime.datetime(int(year), int(month), int(day),  int(hour))
+                t[attr] = datetime.datetime(int(year), int(month), int(day),  int(hour),  int(minute))
 
             else:  # check if it is in format of special day
                 title = eval(attr.upper() + '_DOW_REGEXP').sub('', title)
@@ -353,7 +360,7 @@ class GTD(cmd.Cmd):
         # Parse dates
         for attr in ['start', 'due', 'end']:
             if task.has_key(attr) and task[attr]:
-                s += " " + eval(attr.upper() + '_CHAR') + task[attr].strftime("%Y-%m-%d-%H")
+                s += " " + eval(attr.upper() + '_CHAR') + task[attr].strftime("%Y-%m-%d-%H-%M")
             
         return s
 
@@ -403,7 +410,7 @@ class GTD(cmd.Cmd):
             task_id = self.todo.add(task)
 
             # And, set the start date if none
-            self.do_append("%d S:%s" % (task_id, datetime.datetime.now().strftime("%Y-%m-%d-%H")))
+            self.do_append("%d S:%s" % (task_id, datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")))
 
             return task_id
 
@@ -425,7 +432,7 @@ class GTD(cmd.Cmd):
             self.todo[i] = task
             
             # And, set the start date if none
-            self.do_append("%d S:%s" % (idx, datetime.datetime.now().strftime("%Y-%m-%d-%H")))
+            self.do_append("%d S:%s" % (idx, datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")))
 
     def _search(self, regexp, completed=False, quiet=False):
         """Retrieve tasks matching given regexp.
@@ -823,7 +830,7 @@ class GTD(cmd.Cmd):
             
     def do_startafter(self, id_don):
         """Set the Start / creation date:
-        GTD> startafter #id +/-days"""
+        GTD> startafter #id +/-hours"""
 
         # Parse command line
         idx, days_onset = self._parse_args(id_don)
@@ -837,7 +844,7 @@ class GTD(cmd.Cmd):
                 hours = int(days_onset)*24
             now = datetime.datetime.now()
             dayend = now + datetime.timedelta(hours=hours)
-            date = dayend.strftime("%Y-%m-%d-%H")
+            date = dayend.strftime("%Y-%m-%d-%H-%M")
 
             self.do_modify("%d S:%s" % (idx, date))
             
@@ -862,14 +869,14 @@ class GTD(cmd.Cmd):
         
         if idx and days_offset:
             # Compute the new date= now + days_offset
-            s = re.search('(\d)h', days_onset, re.I)
+            s = re.search('(\d)h', days_offset, re.I)
             if s:
                 hours = int(s.group(1))
             else:
-                hours = int(days_onset)*24
+                hours = int(days_offset)*24
             now = datetime.datetime.now()
             dayend = now + datetime.timedelta(hours=hours)
-            date = dayend.strftime("%Y-%m-%d-%H")
+            date = dayend.strftime("%Y-%m-%d-%H-%M")
 
             self.do_modify("%d D:%s" % (idx, date))
 
@@ -1583,10 +1590,50 @@ Type 'help' or '?' for more commands/options."""
     #
     
     def do_rsync_goagent(self, line=None):
+        """ use  goagent proxy """
         self.do_rsync('g')
         
     do_rg = do_rsync_goagent
     
+    def do_mail(self, id_address):
+        """ send email to project's email' """
+        idx, address = self._parse_args(id_address)
+        if idx:
+            # Frist, we need to find the task
+            task = self.todo.find('id', idx)
+            if task:
+                project = '暂无'
+                if address is None:
+                    if task.has_key('project') and task['project']:
+                        project = task['project'][0]
+                        address = self.pro.get_config(project, 'mail')
+                    else:
+                        print 'no address'
+                        return False
+                else:
+                    pass
+                conetnt = self._show(task)
+                complete = '0'
+                if task.has_key('complete') and task['complete']:
+                    complete = task['complete']
+                print '正在发送中...',
+                p = Popen(['mutt', '-s', "[项目：%s] %s (进度：%s%%)" %(project, task['title'], complete), address], stdout=PIPE, stdin=PIPE, stderr=PIPE)
+                p.communicate(input=conetnt)
+                print ' 已发送'
+            else:
+                print 'no Task selected'
+        return
+        
+    def do_addpro(self, args):
+        """ add project's attribute """
+        n = re.search(r"\s*(\S+)\s+(\S+)\s+(.*)", args)
+        if n:
+            section = n.group(1)
+            option  = n.group(2)
+            value   = n.group(3)
+            self.pro.set(section, option, value)
+            print '%s:%s added' % (section, option)
+
     def do_check(self, nb = None):
         """ check """
         nb = self._parse_args(nb)[0]
@@ -1601,9 +1648,10 @@ Type 'help' or '?' for more commands/options."""
             if int(nb) < index:
                 break
             pynotify.init(str(task['id']))
-            task_notify = pynotify.Notification(task['title']+ ' 开始于 '+task['start'].strftime("%Y-%m-%d-%H"))
+            task_notify = pynotify.Notification(task['title']+ ' 开始于 '+task['start'].strftime("%Y-%m-%d-%H-%M"))
             task_notify.show()
             index += 1
+        return
     #
     # Quit.
     #
