@@ -65,7 +65,7 @@ TODO_TXT    = TODO_DIR + "/todo.txt"
 TODO_REST   = TODO_DIR + "/todo.rest"
 TODO_TMP    = TODO_DIR + "/todo.tmp"
 REPORT_TXT  = TODO_DIR + "/report.txt"
-DONE_TXT    = TODO_DIR + "/done.txt"
+DONE_TXT    = TODO_DIR + "/"+datetime.datetime.now().strftime("%Y-%m-%d")+"-done.txt"
 
 FORMATTED_DISPLAY = True  # show task details or no?
 USE_SHORTCUTS = False  # use all shortcuts or no?
