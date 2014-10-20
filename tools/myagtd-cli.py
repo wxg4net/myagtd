@@ -36,7 +36,9 @@ import os
 import sys
 sys.path.append(os.path.join(sys.path[0], '../src'))  # add src dir
 import inspect  # function inspect
-import yagtd
+
+import imp
+yagtd = imp.load_source('myagtd', '../src/myagtd.py')
 
 #
 # Subclass optparse.IndentedHelpFormatter in order

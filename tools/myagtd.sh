@@ -23,7 +23,7 @@ TODOFILE=~/todo.txt
 #TODOFILE=../tests/todo.txt
 
 # Path to 'yagtd-cli.py' wrapper.
-YAGTD_CLI=yagtd-cli.py
+YAGTD_CLI=myagtd-cli.py
 #YAGTD_CLI=./yagtd-cli.py
 
 #
