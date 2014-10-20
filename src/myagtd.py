@@ -65,7 +65,7 @@ TODO_TXT    = TODO_DIR + "/todo.txt"
 TODO_REST   = TODO_DIR + "/todo.rest"
 TODO_TMP    = TODO_DIR + "/todo.tmp"
 REPORT_TXT  = TODO_DIR + "/report.txt"
-DONE_TXT    = TODO_DIR + "/"+datetime.datetime.now().strftime("%Y-%m-%d")+"-done.txt"
+DONE_TXT    = TODO_DIR + "/done-"+datetime.datetime.now().strftime("%Y-%m-%d")+".txt"
 
 FORMATTED_DISPLAY = True  # show task details or no?
 USE_SHORTCUTS = False  # use all shortcuts or no?
@@ -171,7 +171,7 @@ class GTD(cmd.Cmd):
     def __init__(self):
         cmd.Cmd.__init__(self)
         self.intro= """
-  yaGTD is a free software available under the terms of the GNU GPL.
+  myaGTD is a free software available under the terms of the GNU GPL.
   Refer to the file COPYING (which should be included in this distribution)
   for the specific terms of this licence.
   """
@@ -1345,7 +1345,7 @@ class GTD(cmd.Cmd):
 
     def do_archive(self, donetxt):
         """Archive completed tasks:
-        GTD> archive [path/to/done.txt]"""
+        GTD> archive [path/to/done-2014-03-12.txt]"""
 
         if donetxt == "": donetxt = DONE_TXT
 
@@ -1637,20 +1637,20 @@ Type 'help' or '?' for more commands/options."""
     def do_check(self, nb = None):
         """ check """
         nb = self._parse_args(nb)[0]
-        now = datetime.datetime.now()
-        end = now + datetime.timedelta(hours=1)
-        todos = [ t for t in self.todo.sort() if t['complete'] < 100 and ( (t['start'] > now and t['start'] < end) or \
-            (t['due'] is not None and t['due'] > now and t['due'] < end ) ) ] 
-        index = 1
-        if nb is None:
-            nb = 2
-        for task in todos:
-            if int(nb) < index:
-                break
-            pynotify.init(str(task['id']))
-            task_notify = pynotify.Notification(task['title']+ ' 开始于 '+task['start'].strftime("%Y-%m-%d-%H-%M"))
+        tasks = [ t for t in self.todo.sort() if t['complete'] < 100 ]
+
+        # Appear only after start date
+        today = datetime.datetime.now()
+        tasks = [ t for t in tasks if t['start'] <= today or (t['due'] and t['due'] <= today) ]
+        if nb: # display only nb tasks
+            tasks = tasks[:nb]
+        else:
+            tasks = tasks[:1]
+        for t in tasks:
+            pynotify.init(str(t['id']))
+            task_notify = pynotify.Notification('待办事务',self._disp(t).strip(), '/usr/share/icons/gnome/32x32/emblems/emblem-important.png')
+            task_notify.set_urgency(pynotify.URGENCY_NORMAL)
             task_notify.show()
-            index += 1
         return
     #
     # Quit.
