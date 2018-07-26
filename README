@@ -1,4 +1,4 @@
-### 使用方法与yagtd基本相同 可执行程式更换为 yagtd++.py
+# 使用方法与yagtd基本相同。时间精度精确到小时级别，并增加了可同步到Google Tasks的支持
 
 #
 # yaGTD - Yet Another Getting Things Done
